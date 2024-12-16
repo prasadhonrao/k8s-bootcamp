@@ -8,8 +8,8 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: nginx-app 
-  replicas: 10 
+      app: nginx-app
+  replicas: 3
   template:
     metadata:
       labels:
@@ -18,9 +18,11 @@ spec:
       containers:
         - name: nginx-container
           image: nginx
+          ports:
+            - containerPort: 80
           resources:
             limits:
-              cpu: "1"
-              memory: "512Mi"
+              cpu: '1'
+              memory: '512Mi'
       nodeSelector:
         kubernetes.io/os: linux
