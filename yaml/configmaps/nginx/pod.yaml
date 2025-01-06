@@ -1,5 +1,4 @@
 # Create a pod and set individual environment variables from configmap
-
 apiVersion: v1
 kind: Pod
 metadata:
@@ -26,14 +25,12 @@ spec:
               key: country
       resources:
         limits:
-          cpu: "1"
-          memory: "512Mi"
+          cpu: '1'
+          memory: '512Mi'
   nodeSelector:
     kubernetes.io/os: linux
---- 
-
+---
 # Create a pod and set all environment variables from configmap
-
 apiVersion: v1
 kind: Pod
 metadata:
@@ -47,14 +44,12 @@ spec:
             name: app-config-map
       resources:
         limits:
-          cpu: "1"
-          memory: "512Mi"
+          cpu: '1'
+          memory: '512Mi'
   nodeSelector:
     kubernetes.io/os: linux
 ---
-
 # Create a pod and load configmap as volume. This will create a file for each key in configmap. If key has dot in it, then it will create a directory and file inside it. If the file content changes, it will be reflected in the pod.
-
 apiVersion: v1
 kind: Pod
 metadata:
@@ -65,8 +60,8 @@ spec:
       image: nginx
       resources:
         limits:
-          cpu: "1"
-          memory: "512Mi"
+          cpu: '1'
+          memory: '512Mi'
       volumeMounts:
         - name: config-volume
           mountPath: /etc/config
