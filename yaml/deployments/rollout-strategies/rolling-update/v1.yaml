@@ -3,15 +3,15 @@ kind: Deployment
 metadata:
   name: node-app-deployment
 spec:
-  replicas: 3
-  minReadySeconds: 1
-  progressDeadlineSeconds: 10
-  revisionHistoryLimit: 5
+  replicas: 3 # tells deployment to run 3 pods matching the template
+  minReadySeconds: 1 # tells deployment to wait for 1 second before marking the pod as ready
+  progressDeadlineSeconds: 10 # tells deployment to wait for 10 seconds before timing out
+  revisionHistoryLimit: 5 # tells deployment to keep 5 old replica sets
   strategy:
     rollingUpdate:
       maxSurge: 1 # 1 pod can be created over the desired number of pods
       maxUnavailable: 1 # 1 pod can be unavailable during the update
-    type: RollingUpdate
+    type: RollingUpdate # tells deployment to use rolling update strategy
   selector:
     matchLabels:
       app: node-app
@@ -21,12 +21,12 @@ spec:
         app: node-app
     spec:
       containers:
-      - image: prasadhonrao/js-node-app:1.0
-        name: node-app-container-1
-        resources:
-          limits:
-            cpu: "0.5"
-            memory: "512Mi"
-          requests:
-            cpu: "0.1"
-            memory: "128Mi"
+        - image: prasadhonrao/js-node-app:1.0
+          name: node-app-container-1
+          resources:
+            limits:
+              cpu: '0.5'
+              memory: '512Mi'
+            requests:
+              cpu: '0.1'
+              memory: '128Mi'
