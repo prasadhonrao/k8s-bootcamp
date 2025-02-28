@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sidecar-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sidecar-app
+  template:
+    metadata:
+      labels:
+        app: sidecar-app
+    spec:
+      volumes:
+        - name: logs-volume
+          emptyDir: {}
+
+      containers:
+        - name: server
+          image: prasadhonrao/sidecar-server
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: logs-volume
+              mountPath: /logs
+
+        - name: logger
+          image: prasadhonrao/sidecar-logger
+          volumeMounts:
+            - name: logs-volume
+              mountPath: /logs
