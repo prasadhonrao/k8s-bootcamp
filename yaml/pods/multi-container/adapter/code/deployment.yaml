@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adapter-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adapter-app
+  template:
+    metadata:
+      labels:
+        app: adapter-app
+    spec:
+      volumes:
+        - name: logs-volume
+          emptyDir: {}
+
+      containers:
+        - name: server
+          image: prasadhonrao/adapter-server
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: logs-volume
+              mountPath: /logs
+
+        - name: logger
+          image: prasadhonrao/adapter-logger
+          volumeMounts:
+            - name: logs-volume
+              mountPath: /logs

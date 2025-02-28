@@ -5,7 +5,7 @@ docker push prasadhonrao/sidecar-logger
 
 kubectl apply -f deployment.yaml
 
-kubectl get pods
+kubectl get pods --watch
 
 # Port-forward to the server container
 kubectl port-forward sidecar-app-6485fcbdbc-h89st 3000:3000
