@@ -4,82 +4,82 @@ A Kubernetes ConfigMap is a resource that allows you to decouple configuration i
 
 Let's explore an example to understand how Kubernetes ConfigMaps work:
 
-### Example: Application Configuration using ConfigMap
+## Example: Application Configuration using ConfigMap
 
 Suppose you have a containerized application that requires several configuration parameters, such as database connection details, API endpoints, and other settings. Instead of hardcoding these values into your application's code, you can use a ConfigMap to provide them as external configuration.
 
 1. **Define ConfigMap**: Create a ConfigMap resource to store your application's configuration data.
 
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: app-config
-data:
-  DB_HOST: 'db.example.com'
-  API_URL: 'https://api.example.com'
-```
+   ```yaml
+   apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: app-config
+   data:
+     DB_HOST: 'db.example.com'
+     API_URL: 'https://api.example.com'
+   ```
 
-In this example, we define a ConfigMap named `app-config` and set two key-value pairs for `DB_HOST` and `API_URL`.
+   In this example, we define a ConfigMap named `app-config` and set two key-value pairs for `DB_HOST` and `API_URL`.
 
 2. **Inject ConfigMap into Pod**: Next, you can inject the ConfigMap data into your application's pods by referencing it in a pod's environment variables or as volumes.
 
-Using environment variables:
+   Using environment variables:
 
-```yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: app-pod
-spec:
-  containers:
-    - name: app-container
-      image: your-app-image:latest
-      envFrom:
-        - configMapRef:
-            name: app-config
-```
+   ```yaml
+   apiVersion: v1
+   kind: Pod
+   metadata:
+     name: app-pod
+   spec:
+     containers:
+       - name: app-container
+         image: your-app-image:latest
+         envFrom:
+           - configMapRef:
+               name: app-config
+   ```
 
-Using volumes:
+   Using volumes:
 
-```yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: app-pod
-spec:
-  containers:
-    - name: app-container
-      image: your-app-image:latest
-      volumeMounts:
-        - name: config-volume
-          mountPath: /app/config
-  volumes:
-    - name: config-volume
-      configMap:
-        name: app-config
-```
+   ```yaml
+   apiVersion: v1
+   kind: Pod
+   metadata:
+     name: app-pod
+   spec:
+     containers:
+       - name: app-container
+         image: your-app-image:latest
+         volumeMounts:
+           - name: config-volume
+             mountPath: /app/config
+     volumes:
+       - name: config-volume
+         configMap:
+           name: app-config
+   ```
 
 3. **Access Configuration in the Application**: Inside your application, you can access the configuration data using the provided environment variables or by reading files in the mounted volume.
 
-For environment variables:
+   For environment variables:
 
-```python
-db_host = os.environ.get("DB_HOST")
-api_url = os.environ.get("API_URL")
-```
+   ```python
+   db_host = os.environ.get("DB_HOST")
+   api_url = os.environ.get("API_URL")
+   ```
 
-For mounted volumes:
+   For mounted volumes:
 
-```python
-with open("/app/config/DB_HOST") as f:
-    db_host = f.read().strip()
+   ```python
+   with open("/app/config/DB_HOST") as f:
+       db_host = f.read().strip()
 
-with open("/app/config/API_URL") as f:
-    api_url = f.read().strip()
-```
+   with open("/app/config/API_URL") as f:
+       api_url = f.read().strip()
+   ```
 
-### Use Cases for ConfigMaps
+## Use Cases for ConfigMaps
 
 ConfigMaps offer several advantages in various scenarios:
 
