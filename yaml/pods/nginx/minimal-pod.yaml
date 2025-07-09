@@ -4,5 +4,5 @@ metadata:
   name: minimal-nginx-pod
 spec:
   containers:
-    - name: nginx-container
+    - name: minimal-nginx-container
       image: nginx
