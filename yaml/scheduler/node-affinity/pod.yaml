@@ -4,21 +4,21 @@ metadata:
   name: gpu-pod
 spec:
   containers:
-      - name: gpu-container
-        image: nginx
-        resources:
-          requests:
-            cpu: "50m"
-            memory: "64Mi"
-          limits:
-            cpu: "100m"
-            memory: "128Mi"
+    - name: gpu-container
+      image: nginx
+      resources:
+        requests:
+          cpu: '50m'
+          memory: '64Mi'
+        limits:
+          cpu: '100m'
+          memory: '128Mi'
   affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-                - key: gpu
-                  operator: In
-                  values:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: gpu
+                operator: In # Other options: NotIn, Exists, DoesNotExist, Gt, Lt
+                values:
                   - 'true'
