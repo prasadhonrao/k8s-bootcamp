@@ -1,0 +1,86 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: comprehensive-example
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: web-server
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow HTTP traffic from load balancer
+    - from:
+        - podSelector:
+            matchLabels:
+              app: load-balancer
+      ports:
+        - protocol: TCP
+          port: 80
+    # Allow HTTPS traffic from ingress controller
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 443
+    # Allow monitoring traffic
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: monitoring
+        - podSelector:
+            matchLabels:
+              app: prometheus
+      ports:
+        - protocol: TCP
+          port: 8080
+    # Allow traffic from specific IP block (admin network)
+    - from:
+        - ipBlock:
+            cidr: 10.0.0.0/8
+            except:
+              - 10.0.1.0/24
+      ports:
+        - protocol: TCP
+          port: 22
+  egress:
+    # Allow database access
+    - to:
+        - podSelector:
+            matchLabels:
+              app: postgres
+      ports:
+        - protocol: TCP
+          port: 5432
+    # Allow Redis cache access
+    - to:
+        - podSelector:
+            matchLabels:
+              app: redis
+      ports:
+        - protocol: TCP
+          port: 6379
+    # Allow access to external API
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 169.254.169.254/32 # Block metadata service
+              - 127.0.0.0/8 # Block localhost
+              - 10.0.0.0/8 # Block private networks
+              - 172.16.0.0/12 # Block private networks
+              - 192.168.0.0/16 # Block private networks
+      ports:
+        - protocol: TCP
+          port: 443
+    # Allow DNS resolution
+    - to: []
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
