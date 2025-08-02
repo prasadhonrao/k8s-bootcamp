@@ -4,15 +4,13 @@
 kubectl create configmap app-settings-cm-1 \
         --from-literal=color=blue \
         --from-literal=author="prasad honrao" \
-        --from-literal=country.state="India.MH"
+        --from-literal=country="India"
 
 # --from-file creates the configmap with filename as the key and file contents as the value
-kubectl create configmap app-settings-cm-2 \
-        --from-file=appconfig
+kubectl create configmap app-settings-cm-2 --from-file=appconfig
 
 # --from-env-file creates the configmap with each line in the file as key=value pair
-kubectl create configmap app-settings-cm-3 \
-        --from-env-file=appconfig
+kubectl create configmap app-settings-cm-3 --from-env-file=appconfig
 
 # Verify that the configmap is created
 kubectl get configmap
@@ -47,7 +45,7 @@ kubectl get pods
 kubectl describe pod nginx-configmap-pod
 
 # Exec into the pod and view the environment variables
-kubectl exec nginx-configmap-pod -it sh
+kubectl exec -it nginx-configmap-pod-3 -- sh
 
 # Print the environment variables
 printenv

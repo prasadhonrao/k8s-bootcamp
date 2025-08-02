@@ -11,19 +11,22 @@ spec:
         - name: AUTHOR
           valueFrom:
             configMapKeyRef:
-              name: app-config-map
+              name: app-settings-cm-1
               key: author
         - name: COLOR
           valueFrom:
             configMapKeyRef:
-              name: app-config-map
+              name: app-settings-cm-1
               key: color
         - name: COUNTRY
           valueFrom:
             configMapKeyRef:
-              name: app-config-map
+              name: app-settings-cm-1
               key: country
       resources:
+        requests:
+          cpu: '250m'
+          memory: '128Mi'
         limits:
           cpu: '1'
           memory: '512Mi'
@@ -41,8 +44,11 @@ spec:
       image: nginx
       envFrom:
         - configMapRef:
-            name: app-config-map
+            name: app-settings-cm-2
       resources:
+        requests:
+          cpu: '250m'
+          memory: '128Mi'
         limits:
           cpu: '1'
           memory: '512Mi'
@@ -59,15 +65,18 @@ spec:
     - name: nginx-configmap-container
       image: nginx
       resources:
+        requests:
+          cpu: '250m'
+          memory: '128Mi'
         limits:
           cpu: '1'
           memory: '512Mi'
       volumeMounts:
-        - name: config-volume
+        - name: cm-volume
           mountPath: /etc/config
   volumes:
-    - name: config-volume
+    - name: cm-volume
       configMap:
-        name: app-config-map
+        name: app-settings-cm-3
   nodeSelector:
     kubernetes.io/os: linux
